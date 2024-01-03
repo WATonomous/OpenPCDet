@@ -17,10 +17,11 @@ E.g.
 docker run -it -u root -v /mnt/wato-drive2/nuscenes-1.0-mini:/data/nuscenes-mini -v /mnt/wato-drive2/perception-weights/lidar_object_detection:/models openpcdet-docker:latest /bin/bash
 ```
 
-Inside the container, you can run OpenPCDet:
+Inside the container, you can run OpenPCDet:  
+where the models and data directories are from the root of your container and must be downloaded from their respective sources!
 ```
 cd tools
-python3 demo.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml     --ckpt /models/pv_rcnn_8369.pth --data_path /data/000000.bin
+python3 demo.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt /models/pv_rcnn_8369.pth --data_path /data/000000.bin
 ```
 
 ## Build Through Dockerfile

@@ -12,6 +12,10 @@ Then login to the container and make sure to mount the path of the model and dat
 ```
  docker run -it -v {WATO_DRIVE_PATH_TO_DATA}:/data/ -v {WATO_DRIVE_PATH_TO_MODELS}:/models openpcdet-docker:latest /bin/bash
 ```
+E.g.
+```
+docker run -it -u root -v /mnt/wato-drive2/nuscenes-1.0-mini:/data/nuscenes-mini -v /mnt/wato-drive2/perception-weights/lidar_object_detection:/models openpcdet-docker:latest /bin/bash
+```
 
 Inside the container, you can run OpenPCDet:
 ```

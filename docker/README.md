@@ -2,6 +2,23 @@
 
 You can either build the docker image through Dockerfile or pull the docker image from dockerhub. Please make sure nvidia-docker is corretly installed.
 
+## Build through Dockerfile (WATO)
+Build docker image:
+```shell script
+docker build -f wato_cu116.Dockerfile -t openpcdet-docker .
+```
+
+Then login to the container and make sure to mount the path of the model and data as volumes:
+```
+ docker run -it -v {WATO_DRIVE_PATH_TO_DATA}:/data/ -v {WATO_DRIVE_PATH_TO_MODELS}:/models openpcdet-docker:latest /bin/bash
+```
+
+Inside the container, you can run OpenPCDet:
+```
+cd tools
+python3 demo.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml     --ckpt /models/pv_rcnn_8369.pth --data_path /data/000000.bin
+```
+
 ## Build Through Dockerfile
 Build docker image that support OpenPCDet through:
 ```shell script

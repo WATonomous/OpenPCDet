@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get update && apt-get install -y \
     pcl-tools \
-    python3-pcl
+    python3-pcl \
+    xvfb \
+    x11-utils
     # libpcl-dev 
     # libgoogle-glog-dev libgflags-dev libatlas-base-dev
     # libsuitesparse-dev python3-pcl pcl-tools libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev
@@ -79,6 +81,13 @@ RUN git clone https://github.com/open-mmlab/OpenPCDet.git
 
 WORKDIR OpenPCDet
 
+# Set up Xvfb (X Virtual FrameBuffer)
+RUN echo '#!/bin/bash\nXvfb :99 -screen 0 1280x1024x24 &\nsleep 3\nexec "$@"' > /usr/local/bin/start-xvfb.sh \
+    && chmod +x /usr/local/bin/start-xvfb.sh
+
+# Set the environment variable for DISPLAY
+ENV DISPLAY=:99
+
 RUN python3 setup.py develop
     
 WORKDIR /
@@ -91,3 +100,5 @@ ENV NVIDIA_VISIBLE_DEVICES="all" \
 
 # Build instructions: docker build -f minimal.Dockerfile -t openpcdet:cuda11 .
 # Start instructions: xhost local:root && docker run -it --rm -e SDL_VIDEODRIVER=x11 -e DISPLAY=$DISPLAY --env='DISPLAY' --gpus all --ipc host --privileged --network host -p 8080:8081 -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v file_locations:/storage -v /weights:/weights openpcdet:cuda11 xfce4-terminal --title=openPCDet
+CMD ["/usr/local/bin/start-xvfb.sh"]
+# CMD ["/usr/local/bin/start-xvfb.sh", "python3", "demo.py", "--cfg_file", "cfgs/kitti_models/pv_rcnn.yaml", "--ckpt", "/models/pv_rcnn8369.pth", "--data_path", "/data/velodyne/data/0000000000.bin"]

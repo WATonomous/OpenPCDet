@@ -77,6 +77,8 @@ RUN pip3 install spconv-cu116
 RUN pip3 install kornia==0.6.8
 
 WORKDIR /
+RUN git clone https://github.com/NVIDIA-AI-IOT/CUDA-PointPillars.git
+
 COPY /OpenPCDet /OpenPCDet
 # RUN git clone https://github.com/open-mmlab/OpenPCDet.git
 

@@ -7,6 +7,7 @@ import open3d
 import torch
 import matplotlib
 import numpy as np
+import time
 
 box_colormap = [
     [1, 1, 1],
@@ -69,7 +70,12 @@ def draw_scenes(points, gt_boxes=None, ref_boxes=None, ref_labels=None, ref_scor
     if ref_boxes is not None:
         vis = draw_box(vis, ref_boxes, (0, 1, 0), ref_labels, ref_scores)
 
-    vis.run()
+    vis.update_geometry(pts)
+    vis.poll_events()
+    vis.update_renderer()
+    time.sleep(5)
+    # Black screen fix comes from: https://github.com/isl-org/Open3D/issues/1110
+    vis.capture_screen_image("bb_output.png", True)
     vis.destroy_window()
 
 

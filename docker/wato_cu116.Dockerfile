@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get update && apt-get install -y \
     pcl-tools \
-    python3-pcl
+    python3-pcl \
+    xvfb \
+    x11-utils
     # libpcl-dev 
     # libgoogle-glog-dev libgflags-dev libatlas-base-dev
     # libsuitesparse-dev python3-pcl pcl-tools libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev
@@ -65,7 +67,6 @@ rm -rf /opencv
 WORKDIR /
 ENV OpenCV_DIR=/usr/share/OpenCV
 
-
 # PyTorch for CUDA 11.6
 RUN pip3 install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu116
 ENV TORCH_CUDA_ARCH_LIST="3.5;5.0;6.0;6.1;7.0;7.5;8.0;8.6+PTX"
@@ -75,9 +76,21 @@ RUN pip3 install numpy==1.23.0 llvmlite numba tensorboardX easydict pyyaml sciki
 RUN pip3 install spconv-cu116
 RUN pip3 install kornia==0.6.8
 
-RUN git clone https://github.com/open-mmlab/OpenPCDet.git
+# Get extra kitti data
+WORKDIR /
+RUN git clone https://github.com/NVIDIA-AI-IOT/CUDA-PointPillars.git
 
-WORKDIR OpenPCDet
+COPY /OpenPCDet /OpenPCDet
+# RUN git clone https://github.com/open-mmlab/OpenPCDet.git
+
+WORKDIR /OpenPCDet
+
+# Set up xvfb (X Virtual FrameBuffer)
+RUN echo '#!/bin/bash\nXvfb :99 -screen 0 1280x1024x24 &\nsleep 3\nexec "$@"' > /usr/local/bin/start-xvfb.sh \
+    && chmod +x /usr/local/bin/start-xvfb.sh
+
+# Set the environment variable for DISPLAY
+ENV DISPLAY=:99
 
 RUN python3 setup.py develop
     
@@ -91,3 +104,4 @@ ENV NVIDIA_VISIBLE_DEVICES="all" \
 
 # Build instructions: docker build -f minimal.Dockerfile -t openpcdet:cuda11 .
 # Start instructions: xhost local:root && docker run -it --rm -e SDL_VIDEODRIVER=x11 -e DISPLAY=$DISPLAY --env='DISPLAY' --gpus all --ipc host --privileged --network host -p 8080:8081 -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v file_locations:/storage -v /weights:/weights openpcdet:cuda11 xfce4-terminal --title=openPCDet
+CMD ["/usr/local/bin/start-xvfb.sh"]

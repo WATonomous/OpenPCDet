@@ -22,13 +22,26 @@ Inside the container, you can run OpenPCDet through xvfb using the start-xvfb.sh
 where the models and data directories are from the root of your container and must be downloaded from their respective sources!
 ```shell script
 cd tools
-/usr/local/bin/start-xvfb.sh python3 demo.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt /models/pv_rcnn8369.pth --data_path /data/velodyne/data/0000000050.bin
+/usr/local/bin/start-xvfb.sh python3 demo.py --cfg_file cfgs/kitti_models/pv_rcnn.yaml --ckpt /models/pv_rcnn_8369.pth --data_path /data/velodyne/data/0000000050.bin
 ```
 
 The rendered image will be created in the same directory as demo.py, this can be copied from the docker container where the second argument can be customized to your desired path:  
 ```shell script
 docker cp {CONTAINER_ID}:/OpenPCDet/tools/bb_output.png /home/{USER}
 ```
+
+
+### Pushing to Github GHCR
+To manually push an image to GHCR, first login to GHCR:
+```
+docker login ghcr.io
+```
+Then tag and push the image:
+```
+docker tag openpcdet-docker:yourtag ghcr.io/watonomous/openpcdet-docker:yourag
+docker push ghcr.io/watonomous/openpcdet-docker:yourtag
+```
+
 ## Build Through Dockerfile
 Build docker image that support OpenPCDet through:
 ```shell script

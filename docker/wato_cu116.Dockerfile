@@ -76,15 +76,16 @@ RUN pip3 install numpy==1.23.0 llvmlite numba tensorboardX easydict pyyaml sciki
 RUN pip3 install spconv-cu116
 RUN pip3 install kornia==0.6.8
 
+# Get extra kitti data
 WORKDIR /
 RUN git clone https://github.com/NVIDIA-AI-IOT/CUDA-PointPillars.git
 
 COPY /OpenPCDet /OpenPCDet
 # RUN git clone https://github.com/open-mmlab/OpenPCDet.git
 
-WORKDIR OpenPCDet
+WORKDIR /OpenPCDet
 
-# Set up Xvfb (X Virtual FrameBuffer)
+# Set up xvfb (X Virtual FrameBuffer)
 RUN echo '#!/bin/bash\nXvfb :99 -screen 0 1280x1024x24 &\nsleep 3\nexec "$@"' > /usr/local/bin/start-xvfb.sh \
     && chmod +x /usr/local/bin/start-xvfb.sh
 

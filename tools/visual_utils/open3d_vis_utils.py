@@ -74,8 +74,8 @@ def draw_scenes(points, gt_boxes=None, ref_boxes=None, ref_labels=None, ref_scor
     vis.poll_events()
     vis.update_renderer()
     time.sleep(5)
-    # https://github.com/isl-org/Open3D/issues/1110
-    vis.capture_screen_image("kitti_ds_render.png", True)
+    # Black screen fix comes from: https://github.com/isl-org/Open3D/issues/1110
+    vis.capture_screen_image("bb_output.png", True)
     vis.destroy_window()
 
 

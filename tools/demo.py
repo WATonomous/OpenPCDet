@@ -3,7 +3,6 @@ import glob
 from pathlib import Path
 
 try:
-    import open3d
     from visual_utils import open3d_vis_utils as V
     OPEN3D_FLAG = True
 except:
@@ -45,7 +44,7 @@ class DemoDataset(DatasetTemplate):
 
     def __getitem__(self, index):
         if self.ext == '.bin':
-            points = np.fromfile(self.sample_file_list[index], dtype=np.float32).reshape(-1, 4)
+            points = np.fromfile(self.sample_file_list[index], dtype=np.float32).reshape(-1, 5)
         elif self.ext == '.npy':
             points = np.load(self.sample_file_list[index])
         else:
@@ -62,7 +61,7 @@ class DemoDataset(DatasetTemplate):
 
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
-    parser.add_argument('--cfg_file', type=str, default='cfgs/kitti_models/second.yaml',
+    parser.add_argument('--cfg_file', type=str, default='cfgs/nuscenes_models/cbgs_second_multihead.yaml',
                         help='specify the config for demo')
     parser.add_argument('--data_path', type=str, default='demo_data',
                         help='specify the point cloud data file or directory')

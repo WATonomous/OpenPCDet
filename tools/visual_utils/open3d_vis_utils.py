@@ -8,12 +8,23 @@ import torch
 import matplotlib
 import numpy as np
 import time
+from pcdet.utils import common_utils
+
+logger = common_utils.create_logger()
 
 box_colormap = [
-    [1, 1, 1],
-    [0, 1, 0],
-    [0, 1, 1],
-    [1, 1, 0],
+    [1, 1, 1],  # color for label 0
+    [0, 1, 0],  # color for label 1
+    [0, 1, 1],  # color for label 2
+    [1, 1, 0],  # color for label 3
+    [0, 0, 1],  # color for label 4
+    [1, 0, 0],  # color for label 5
+    [0, 0, 0],  # color for label 6
+    [1, 0, 1],  # color for label 7
+    [0.5, 0.5, 0],  # color for label 8
+    [0, 0.5, 0.5],  # color for label 9
+    [0.5, 0, 0.5],  # color for label 10
+    # Add more colors if there are more labels
 ]
 
 
@@ -112,8 +123,10 @@ def draw_box(vis, gt_boxes, color=(0, 1, 0), ref_labels=None, score=None):
         if ref_labels is None:
             line_set.paint_uniform_color(color)
         else:
-            line_set.paint_uniform_color(box_colormap[ref_labels[i]])
-
+            try:
+                line_set.paint_uniform_color(box_colormap[ref_labels[i]])
+            except:
+                logger.info(f"Index {ref_labels[i]} out of range")
         vis.add_geometry(line_set)
 
         # if score is not None:

@@ -13,18 +13,18 @@ from pcdet.utils import common_utils
 logger = common_utils.create_logger()
 
 box_colormap = [
-    [1, 1, 1],  # color for label 0
-    [0, 1, 0],  # color for label 1
-    [0, 1, 1],  # color for label 2
-    [1, 1, 0],  # color for label 3
-    [0, 0, 1],  # color for label 4
-    [1, 0, 0],  # color for label 5
-    [0, 0, 0],  # color for label 6
-    [1, 0, 1],  # color for label 7
-    [0.5, 0.5, 0],  # color for label 8
-    [0, 0.5, 0.5],  # color for label 9
-    [0.5, 0, 0.5],  # color for label 10
-    # Add more colors if there are more labels
+    [1, 1, 1],
+    [0, 1, 0],
+    [0, 1, 1],
+    [1, 1, 0],
+    # 3+ feature colours
+    [0, 0, 1],
+    [1, 0, 0],
+    [0, 0, 0],
+    [1, 0, 1],
+    [0.5, 0.5, 0],
+    [0, 0.5, 0.5],
+    [0.5, 0, 0.5],
 ]
 
 

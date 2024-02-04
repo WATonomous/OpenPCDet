@@ -2,7 +2,7 @@ FROM nvidia/cuda:11.6.2-devel-ubuntu20.04
 
 # Set environment variables
 ENV NVENCODE_CFLAGS "-I/usr/local/cuda/include"
-ENV CV_VERSION=4.2.0
+ENV CV_VERSION=4.6.0
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Get all dependencies
@@ -20,10 +20,6 @@ RUN apt-get update && apt-get install -y \
     python3-pcl \
     xvfb \
     x11-utils
-    # libpcl-dev 
-    # libgoogle-glog-dev libgflags-dev libatlas-base-dev
-    # libsuitesparse-dev python3-pcl pcl-tools libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev
-    # libpng-dev libtiff-dev libdc1394-22-dev xfce4-terminal &&\
 RUN rm -rf /var/lib/apt/lists/*
 ##### INSTALL ROS2 #####
 RUN apt update && apt install locales

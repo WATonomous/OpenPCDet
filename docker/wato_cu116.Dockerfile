@@ -2,7 +2,7 @@ FROM nvidia/cuda:11.6.2-devel-ubuntu20.04
 
 # Set environment variables
 ENV NVENCODE_CFLAGS "-I/usr/local/cuda/include"
-ENV CV_VERSION=4.6.0
+ENV CV_VERSION=4.2.0
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Get all dependencies
@@ -20,38 +20,11 @@ RUN apt-get update && apt-get install -y \
     python3-pcl \
     xvfb \
     x11-utils
+    # libpcl-dev 
+    # libgoogle-glog-dev libgflags-dev libatlas-base-dev
+    # libsuitesparse-dev python3-pcl pcl-tools libgtk2.0-dev libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev
+    # libpng-dev libtiff-dev libdc1394-22-dev xfce4-terminal &&\
 RUN rm -rf /var/lib/apt/lists/*
-##### INSTALL ROS2 #####
-RUN apt update && apt install locales
-RUN locale-gen en_US en_US.UTF-8
-RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-RUN export LANG=en_US.UTF-8
-RUN apt install software-properties-common
-RUN add-apt-repository universe
-RUN apt update && apt install curl -y
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
-RUN apt update && apt install -y ros-foxy-ros-base
-RUN apt update && apt install -y \
-  python3-flake8-docstrings \
-  python3-pip \
-  python3-pytest-cov \
-  ros-dev-tools
-RUN python3 -m pip install -U \
-   flake8-blind-except \
-   flake8-builtins \
-   flake8-class-newline \
-   flake8-comprehensions \
-   flake8-deprecated \
-   flake8-import-order \
-   flake8-quotes \
-   "pytest>=5.3" \
-   pytest-repeat \
-   pytest-rerunfailures
-RUN python3 -m pip install --upgrade packaging
-
-RUN rosdep init
-RUN rosdep update
 
 # OpenCV with CUDA support
 WORKDIR /opencv
@@ -120,8 +93,6 @@ RUN echo '#!/bin/bash\nXvfb :99 -screen 0 1280x1024x24 &\nsleep 3\nexec "$@"' > 
 
 # Set the environment variable for DISPLAY
 ENV DISPLAY=:99
-# Environment setup for ROS 2
-RUN echo "source /opt/ros/foxy/setup.bash" >> ~/.bashrc
 
 RUN python3 setup.py develop
     
